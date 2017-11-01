@@ -26,19 +26,13 @@ func (t *Tensor) GobDecode(b []byte) error {
 		return err
 	}
 
-	var shape tf.Shape
+	var shape []int64
 	err = dec.Decode(&shape)
 	if err != nil {
 		return err
 	}
 
-	nd := shape.NumDimensions()
-	s := make([]int64, nd)
-	for i := range s {
-		s[i] = shape.Size(i)
-	}
-
-	tensor, err := tf.ReadTensor(dt, s, r)
+	tensor, err := tf.ReadTensor(dt, shape, r)
 	if err != nil {
 		return err
 	}
@@ -50,7 +44,7 @@ func (t *Tensor) GobDecode(b []byte) error {
 // GobEncode returns a byte slice representing the encoding of the
 // receiver for transmission to a GobDecoder, usually of the same
 // concrete type.
-func (t *Tensor) GobEncode() ([]byte, error) {
+func (t Tensor) GobEncode() ([]byte, error) {
 	var buf bytes.Buffer
 	enc := gob.NewEncoder(&buf)
 
