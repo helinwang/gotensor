@@ -1,6 +1,6 @@
 package: github.com/helinwang/gotensor
 import:
 - package: github.com/tensorflow/tensorflow
-  version: ~1.4.0-rc1
+  version: 1.3.0
   subpackages:
   - tensorflow/go
