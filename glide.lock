@@ -1,0 +1,8 @@
+hash: 521dec99f38556384138efa43f260422ffe2046833f1b25bb2c2ca5f85cbb180
+updated: 2017-11-01T00:18:36.021190467-04:00
+imports:
+- name: github.com/tensorflow/tensorflow
+  version: 358298a3c25e0736a408cac8ae46fb198ec397c3
+  subpackages:
+  - tensorflow/go
+testImports: []
