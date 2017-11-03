@@ -15,8 +15,8 @@ func TestTensorGob(t *testing.T) {
 	tensor, err := tf.NewTensor(v)
 	require.Nil(t, err)
 
-	t0 := gotensor.Tensor{T: tensor}
-	require.Equal(t, v, t0.T.Value())
+	t0 := gotensor.Tensor{tensor}
+	require.Equal(t, v, t0.Value())
 
 	var buf bytes.Buffer
 	enc := gob.NewEncoder(&buf)
@@ -29,10 +29,10 @@ func TestTensorGob(t *testing.T) {
 	dec := gob.NewDecoder(bytes.NewReader(buf.Bytes()))
 	err = dec.Decode(&t1)
 	require.Nil(t, err)
-	require.Equal(t, v, t1.T.Value())
+	require.Equal(t, v, t1.Value())
 
-	t1.T = nil
-	err = dec.Decode(&t1)
+	var t2 gotensor.Tensor
+	err = dec.Decode(&t2)
 	require.Nil(t, err)
-	require.Equal(t, v, t1.T.Value())
+	require.Equal(t, v, t2.Value())
 }

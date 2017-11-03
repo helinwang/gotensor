@@ -10,12 +10,12 @@ import (
 // Tensor is a TensorFlow tensor that satisfies the GobDecoder and the
 // GobEncode interface.
 type Tensor struct {
-	T *tf.Tensor
+	*tf.Tensor
 }
 
-// GobDecode overwrites the receiver, which must be a pointer,
-// with the value represented by the byte slice, which was written
-// by GobEncode, usually for the same concrete type.
+// GobDecode overwrites the receiver, which must be a pointer, with
+// the value represented by the byte slice, which was written by
+// GobEncode, usually for the same concrete type.
 func (t *Tensor) GobDecode(b []byte) error {
 	r := bytes.NewReader(b)
 	dec := gob.NewDecoder(r)
@@ -37,7 +37,7 @@ func (t *Tensor) GobDecode(b []byte) error {
 		return err
 	}
 
-	t.T = tensor
+	t.Tensor = tensor
 	return nil
 }
 
@@ -48,17 +48,17 @@ func (t Tensor) GobEncode() ([]byte, error) {
 	var buf bytes.Buffer
 	enc := gob.NewEncoder(&buf)
 
-	err := enc.Encode(t.T.DataType())
+	err := enc.Encode(t.DataType())
 	if err != nil {
 		return nil, err
 	}
 
-	err = enc.Encode(t.T.Shape())
+	err = enc.Encode(t.Shape())
 	if err != nil {
 		return nil, err
 	}
 
-	_, err = t.T.WriteContentsTo(&buf)
+	_, err = t.WriteContentsTo(&buf)
 	if err != nil {
 		return nil, err
 	}

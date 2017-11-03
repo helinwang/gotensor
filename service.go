@@ -48,7 +48,7 @@ func New(graph []byte) (*Service, error) {
 func (s *Service) Run(req Request, resp *Response) error {
 	feeds := make(map[tf.Output]*tf.Tensor)
 	for _, f := range req.Feeds {
-		feeds[s.Graph.Operation(f.Edge.OpName).Output(f.Edge.Index)] = f.Tensor.T
+		feeds[s.Graph.Operation(f.Edge.OpName).Output(f.Edge.Index)] = f.Tensor.Tensor
 	}
 
 	fetches := make([]tf.Output, len(req.Fetches))
@@ -73,7 +73,7 @@ func (s *Service) Run(req Request, resp *Response) error {
 
 	resp.Outputs = make([]Tensor, len(tensors))
 	for i, t := range tensors {
-		resp.Outputs[i] = Tensor{T: t}
+		resp.Outputs[i] = Tensor{t}
 	}
 	return nil
 }

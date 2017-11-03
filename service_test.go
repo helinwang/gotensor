@@ -25,7 +25,7 @@ func TestFetch(t *testing.T) {
 		Feeds: []gotensor.Feed{
 			gotensor.Feed{
 				Edge:   gotensor.Edge{OpName: "a"},
-				Tensor: gotensor.Tensor{T: tensor},
+				Tensor: gotensor.Tensor{tensor},
 			},
 		},
 		Fetches: []gotensor.Edge{
@@ -34,7 +34,7 @@ func TestFetch(t *testing.T) {
 	}, &resp)
 	require.Nil(t, err)
 	require.Equal(t, "", resp.Error)
-	require.Equal(t, int32(3), resp.Outputs[0].T.Value())
+	require.Equal(t, int32(3), resp.Outputs[0].Value())
 }
 
 func TestTarget(t *testing.T) {
@@ -53,7 +53,7 @@ func TestTarget(t *testing.T) {
 		Feeds: []gotensor.Feed{
 			gotensor.Feed{
 				Edge:   gotensor.Edge{OpName: "a"},
-				Tensor: gotensor.Tensor{T: tensor},
+				Tensor: gotensor.Tensor{tensor},
 			},
 		},
 		Targets: []string{"b"},
