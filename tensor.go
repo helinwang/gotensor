@@ -32,9 +32,25 @@ func (t *Tensor) GobDecode(b []byte) error {
 		return err
 	}
 
-	tensor, err := tf.ReadTensor(dt, shape, r)
-	if err != nil {
-		return err
+	var tensor *tf.Tensor
+	switch dt {
+	case tf.String:
+		// TensorFlow Go package currently does not support
+		// string serialization. Let's do it ourselves.
+		var str string
+		err = dec.Decode(&str)
+		if err != nil {
+			return err
+		}
+		tensor, err = tf.NewTensor(str)
+		if err != nil {
+			return err
+		}
+	default:
+		tensor, err = tf.ReadTensor(dt, shape, r)
+		if err != nil {
+			return err
+		}
 	}
 
 	t.Tensor = tensor
@@ -58,9 +74,19 @@ func (t Tensor) GobEncode() ([]byte, error) {
 		return nil, err
 	}
 
-	_, err = t.WriteContentsTo(&buf)
-	if err != nil {
-		return nil, err
+	switch t.DataType() {
+	case tf.String:
+		// TensorFlow Go package currently does not support
+		// string serialization. Let's do it ourselves.
+		err = enc.Encode(t.Tensor.Value().(string))
+		if err != nil {
+			return nil, err
+		}
+	default:
+		_, err = t.WriteContentsTo(&buf)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return buf.Bytes(), nil
